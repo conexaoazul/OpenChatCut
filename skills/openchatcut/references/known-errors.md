@@ -49,14 +49,9 @@ polling `get_edit_session` only when the client needs the final state. Report
 
 ## Skill baseline is newer
 
-Update the installed skill, then re-read its files:
-
-```bash
-npx skills update openchatcut
-```
-
-If the source alias is unavailable:
-
-```bash
-npx skills add 0xsline/OpenChatCut --skill openchatcut
-```
+**Stop and request a human review.** A newer server baseline does not
+authorize installing, updating or downloading a skill. Record the
+required version, review the exact Git commit, the installer and its
+dependencies, run a local security audit, then obtain a separate GO.
+Never use floating branches or package tags, and never copy MCP tokens
+or private media into repository files.
