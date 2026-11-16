@@ -10,8 +10,9 @@
 5. Call `begin_edit_session` and keep the returned `editSessionId`.
 6. Call `read_project` with that session ID before the first mutation.
 
-Use `approvalMode: "manual"` by default. Use `"auto"` only when the user asks
-for an unattended, atomic application.
+Use `approvalMode: "manual"` in **all** sessions for this Conexão Azul
+PC pilot. Unattended application is out of scope; a separate reviewed
+policy change is required before enabling it.
 
 ## Load specialized guidance
 
