@@ -25,32 +25,46 @@ Check the existing entry:
 codex mcp get openchatcut
 ```
 
-If it is missing, export the token copied from **Settings → MCP** and register it:
+If the entry is missing, a trusted operator must provision
+`OPENCHATCUT_MCP_TOKEN` from a local OS secret manager, without typing
+the actual bearer value into shell history, Git files, chat or screenshots.
+Provide the environment-variable **name**, not the value:
 
 ```bash
-export OPENCHATCUT_MCP_TOKEN='<token>'
 codex mcp add openchatcut \
   --url http://localhost:5199/api/external-mcp/mcp \
   --bearer-token-env-var OPENCHATCUT_MCP_TOKEN
 ```
 
-If an existing URL or token setting is stale, replace only that entry:
-
-```bash
-export OPENCHATCUT_MCP_TOKEN='<token>'
-codex mcp remove openchatcut
-codex mcp add openchatcut \
-  --url http://localhost:5199/api/external-mcp/mcp \
-  --bearer-token-env-var OPENCHATCUT_MCP_TOKEN
-```
+If an existing URL or credential is stale, review and replace only that
+named entry. Do not create a second implicit MCP server.
 
 ### Claude Code
 
-```bash
-claude mcp add --transport http \
-  -H "Authorization: Bearer <token>" \
-  openchatcut http://localhost:5199/api/external-mcp/mcp
+Claude Code supports environment variable expansion in HTTP `headers`
+inside project-scoped `.mcp.json` (official documentation:
+https://code.claude.com/docs/en/mcp). Create this configuration only in
+a **private local media workspace outside Git**, not the dhy checkout:
+
+```json
+{
+  "mcpServers": {
+    "openchatcut": {
+      "type": "http",
+      "url": "http://localhost:5199/api/external-mcp/mcp",
+      "headers": {
+        "Authorization": "Bearer ${OPENCHATCUT_MCP_TOKEN}"
+      }
+    }
+  }
+}
 ```
+
+Provision the environment variable through a secure local process
+before starting Claude Code. If the token is absent, stop instead of
+inserting a literal secret. Never store the actual value in command
+arguments, any repository, prompts, or logs. A reachable TCP port is
+not proof of successful MCP authentication.
 
 For another client, register the endpoint as a Streamable HTTP MCP server and
 set its `Authorization` header to `Bearer <token>`.
